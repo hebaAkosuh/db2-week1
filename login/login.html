@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Student Information System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .login-form {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .demo-credentials {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        
+        .demo-credentials h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .credential-group {
+            margin-bottom: 8px;
+        }
+        
+        .credential-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .credential-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .credential-value {
+            color: #667eea;
+            font-family: monospace;
+        }
+        
+        .login-attempts {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .dashboard-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1200px;
+            min-height: 80vh;
+            display: none;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .dashboard-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .grade-a { color: #28a745; font-weight: 600; }
+        .grade-b { color: #17a2b8; font-weight: 600; }
+        .grade-c { color: #ffc107; font-weight: 600; }
+        .grade-d { color: #fd7e14; font-weight: 600; }
+        .grade-f { color: #dc3545; font-weight: 600; }
+        
+        .status-enrolled { color: #17a2b8; }
+        .status-completed { color: #28a745; }
+        .status-dropped { color: #dc3545; }
+        
+        @media (max-width: 768px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .container, .dashboard-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="container" id="loginContainer">
+        <div class="header">
+            <h1>University SIS</h1>
+            <p>Student Information System</p>
+        </div>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="userType">Login As</label>
+                <select id="userType">
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <div class="login-attempts" id="loginAttempts">Attempts remaining: 3</div>
+            <button class="btn" onclick="login()">Login</button>
+            
+            <div class="message" id="message"></div>
+            
+            <div class="demo-credentials">
+                <h3>Demo Credentials:</h3>
+                <div class="credential-group">
+                    <span class="credential-label">Students:</span>
+                    <span class="credential-value">alice.j@student.edu, bob.w@student.edu</span>
+                </div>
+                <div class="credential-group">
+                    <span class="credential-label">Instructors:</span>
+                    <span class="credential-value">john.smith@university.edu, sarah.j@university.edu</span>
+                </div>
+                <div class="credential-group">
+                    <span class="credential-label">Password (all):</span>
+                    <span class="credential-value">password123</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard (Hidden by default) -->
+    <div class="dashboard-container" id="dashboardContainer">
+        <div class="dashboard-header">
+            <h2>Student Information System Dashboard</h2>
+            <div class="user-info">
+                <span id="userName">User</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <div class="dashboard-content">
+            <div class="sidebar" id="sidebar">
+                <!-- Sidebar content will be populated by JavaScript -->
+            </div>
+            <div class="main-content" id="mainContent">
+                <!-- Main content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let loginAttempts = 3;
+        
+        // Update login attempts display
+        function updateLoginAttemptsDisplay() {
+            document.getElementById('loginAttempts').textContent = 
+                `Attempts remaining: ${loginAttempts}`;
+        }
+        
+        async function login() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const userType = document.getElementById('userType').value;
+            const messageDiv = document.getElementById('message');
+            
+            // Basic validation
+            if (!email || !password) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Reset message
+            messageDiv.className = 'message';
+            messageDiv.textContent = '';
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password, userType })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    showMessage('Login successful! Redirecting...', 'success');
+                    loginAttempts = 3; // Reset attempts on success
+                    updateLoginAttemptsDisplay();
+                    
+                    // Show dashboard after delay
+                    setTimeout(() => {
+                        document.getElementById('loginContainer').style.display = 'none';
+                        document.getElementById('dashboardContainer').style.display = 'block';
+                        loadDashboard();
+                    }, 1000);
+                } else {
+                    loginAttempts--;
+                    updateLoginAttemptsDisplay();
+                    
+                    if (loginAttempts <= 0) {
+                        showMessage('Too many failed attempts. Please try again later.', 'error');
+                        document.getElementById('password').disabled = true;
+                        setTimeout(() => {
+                            loginAttempts = 3;
+                            updateLoginAttemptsDisplay();
+                            document.getElementById('password').disabled = false;
+                        }, 15000); // 15 second lockout
+                    } else {
+                        showMessage(data.message || 'Login failed', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Network error. Please try again.', 'error');
+            }
+        }
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+        }
+        
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('dashboardContainer').style.display = 'none';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('message').className = 'message';
+        }
+        
+        async function loadDashboard() {
+            if (!currentUser) return;
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            
+            try {
+                let response;
+                if (currentUser.userType === 'student') {
+                    response = await fetch(`/api/student/${currentUser.id}/dashboard`);
+                } else {
+                    response = await fetch(`/api/instructor/${currentUser.id}/dashboard`);
+                }
+                
+                const data = await response.json();
+                
+                if (currentUser.userType === 'student') {
+                    renderStudentDashboard(data);
+                } else {
+                    renderInstructorDashboard(data);
+                }
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+                document.getElementById('mainContent').innerHTML = 
+                    '<div class="error">Error loading dashboard</div>';
+            }
+        }
+        
+        function renderStudentDashboard(data) {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Sidebar - Student Info
+            sidebar.innerHTML = `
+                <div class="info-card">
+                    <h3>Student Information</h3>
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">${data.student.first_name} ${data.student.last_name}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Student ID:</span>
+                        <span class="info-value">${data.student.student_id}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Department:</span>
+                        <span class="info-value">${data.student.department_name}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Enrollment Date:</span>
+                        <span class="info-value">${new Date(data.student.enrollment_date).toLocaleDateString()}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Tuition Fees:</span>
+                        <span class="info-value">$${parseFloat(data.student.tuition_fees).toFixed(2)}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current GPA:</span>
+                        <span class="info-value" style="font-weight: 600; color: ${getGPAColor(data.gpa)}">
+                            ${data.gpa || 'N/A'}
+                        </span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>Quick Actions</h3>
+                    <button class="btn" style="margin-bottom: 10px;" onclick="generateTranscript(${currentUser.id})">
+                        Generate Transcript
+                    </button>
+                    <button class="btn" onclick="viewGrades()">
+                        View All Grades
+                    </button>
+                </div>
+            `;
+            
+            // Main Content - Courses
+            let coursesHtml = `
+                <div class="info-card">
+                    <h3>Enrolled Courses</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>Credits</th>
+                                <th>Instructor</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.courses.forEach(course => {
+                const gradeClass = getGradeClass(course.grade);
+                const statusClass = `status-${course.status}`;
+                
+                coursesHtml += `
+                    <tr>
+                        <td>${course.course_code}</td>
+                        <td>${course.course_name}</td>
+                        <td>${course.credits}</td>
+                        <td>${course.instructor_name || 'TBA'}</td>
+                        <td class="${gradeClass}">${course.grade || '-'}</td>
+                        <td class="${statusClass}">${course.status}</td>
+                    </tr>
+                `;
+            });
+            
+            coursesHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            mainContent.innerHTML = coursesHtml;
+        }
+        
+        function renderInstructorDashboard(data) {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Sidebar - Instructor Info
+            sidebar.innerHTML = `
+                <div class="info-card">
+                    <h3>Instructor Information</h3>
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">${data.instructor.first_name} ${data.instructor.last_name}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Instructor ID:</span>
+                        <span class="info-value">${data.instructor.instructor_id}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Department:</span>
+                        <span class="info-value">${data.instructor.department_name}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">${data.instructor.email}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Hire Date:</span>
+                        <span class="info-value">${new Date(data.instructor.hire_date).toLocaleDateString()}</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>Teaching Summary</h3>
+                    <div class="info-row">
+                        <span class="info-label">Courses Assigned:</span>
+                        <span class="info-value">${data.courses.length}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Students:</span>
+                        <span class="info-value">${data.students.length}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Main Content - Courses and Students
+            let coursesHtml = `
+                <div class="info-card">
+                    <h3>Assigned Courses</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>Credits</th>
+                                <th>Capacity</th>
+                                <th>Enrolled</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.courses.forEach(course => {
+                const enrollmentPercent = (course.enrolled_students / course.max_capacity * 100).toFixed(1);
+                
+                coursesHtml += `
+                    <tr>
+                        <td>${course.course_code}</td>
+                        <td>${course.course_name}</td>
+                        <td>${course.credits}</td>
+                        <td>${course.max_capacity}</td>
+                        <td>${course.enrolled_students} (${enrollmentPercent}%)</td>
+                    </tr>
+                `;
+            });
+            
+            coursesHtml += `
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-card">
+                    <h3>Student Grades</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            data.students.forEach(student => {
+                const gradeClass = getGradeClass(student.grade);
+                
+                coursesHtml += `
+                    <tr>
+                        <td>${student.student_name}</td>
+                        <td>${student.course_code}</td>
+                        <td class="${gradeClass}">${student.grade || '-'}</td>
+                        <td class="status-${student.status}">${student.status}</td>
+                        <td>
+                            ${student.grade ? 
+                                `<button onclick="updateGrade(${student.student_id}, ${student.course_id}, '${student.grade}')">Update</button>` : 
+                                `<button onclick="addGrade(${student.student_id}, ${student.course_id})">Add Grade</button>`
+                            }
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            coursesHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            mainContent.innerHTML = coursesHtml;
+        }
+        
+        function getGradeClass(grade) {
+            if (!grade) return '';
+            if (grade >= 90) return 'grade-a';
+            if (grade >= 80) return 'grade-b';
+            if (grade >= 70) return 'grade-c';
+            if (grade >= 60) return 'grade-d';
+            return 'grade-f';
+        }
+        
+        function getGPAColor(gpa) {
+            if (!gpa) return '#666';
+            if (gpa >= 3.5) return '#28a745';
+            if (gpa >= 3.0) return '#17a2b8';
+            if (gpa >= 2.0) return '#ffc107';
+            if (gpa >= 1.0) return '#fd7e14';
+            return '#dc3545';
+        }
+        
+        function updateGrade(studentId, courseId, currentGrade) {
+            const newGrade = prompt(`Enter new grade for student ${studentId} (current: ${currentGrade}):`, currentGrade);
+            if (newGrade && !isNaN(newGrade)) {
+                submitGradeUpdate(studentId, courseId, parseFloat(newGrade));
+            }
+        }
+        
+        function addGrade(studentId, courseId) {
+            const grade = prompt(`Enter grade for student ${studentId}:`);
+            if (grade && !isNaN(grade)) {
+                submitGradeUpdate(studentId, courseId, parseFloat(grade));
+            }
+        }
+        
+        async function submitGradeUpdate(studentId, courseId, grade) {
+            try {
+                const response = await fetch('/api/update-grade', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ studentId, courseId, grade })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('Grade updated successfully!');
+                    loadDashboard(); // Refresh dashboard
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Grade update error:', error);
+                alert('Error updating grade');
+            }
+        }
+        
+        async function generateTranscript(studentId) {
+            try {
+                const response = await fetch(`/api/student/${studentId}/transcript`);
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                console.error('Transcript error:', error);
+                alert('Error generating transcript');
+            }
+        }
+        
+        function viewGrades() {
+            alert('Viewing all grades... (This would show detailed grade history in a real implementation)');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLoginAttemptsDisplay();
+            
+            // Allow pressing Enter to login
+            document.getElementById('password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
